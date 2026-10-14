@@ -3,6 +3,11 @@ go package to add win api functions not in golang.org/x/sys/windows
 
 more functions will be added over time
 
+# install
+```bash
+go get github.com/horobimasu/windowsx
+```
+
 # functions
 1. `user32!SetCursorPos`
 2. `user32!BlockInput`
