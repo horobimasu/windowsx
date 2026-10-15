@@ -113,3 +113,16 @@ const (
 	EVENT_UIA_PROPID_START                        uint32 = 0x7500
 	EVENT_UIA_PROPID_END                          uint32 = 0x75FF
 )
+
+const (
+	WINEVENT_OUTOFCONTEXT   uint32 = 0x0000
+	WINEVENT_SKIPOWNTHREAD  uint32 = 0x0001
+	WINEVENT_SKIPOWNPROCESS uint32 = 0x0002
+	WINEVENT_INCONTEXT      uint32 = 0x0004
+)
+
+const (
+	PM_NOREMOVE uint32 = 0x0000
+	PM_REMOVE   uint32 = 0x0001
+	PM_NOYIELD  uint32 = 0x0002
+)
