@@ -63,11 +63,11 @@ func RtlAdjustPrivilege(privilege uint32, enable bool, onThread bool, lastStatus
 }
 
 func NtRaiseHardError(
-	status uint,
-	numParams uint,
-	paramMask uint,
-	params uint,
-	responseOption uint,
+	status uint32,
+	numParams uint32,
+	paramMask uint32,
+	params uint32,
+	responseOption uint32,
 	response *uint32,
 ) error {
 	var res uint32
