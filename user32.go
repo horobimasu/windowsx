@@ -16,6 +16,7 @@ var (
 	getMessageW        = user32.NewProc("GetMessageW")
 	peekMessageW       = user32.NewProc("PeekMessageW")
 	postThreadMessageW = user32.NewProc("PostThreadMessageW")
+	getWindowText      = user32.NewProc("GetWindowTextW")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -141,4 +142,21 @@ func PostThreadMessage(threadId uint32, message uint32, wParam uintptr, lParam u
 	}
 
 	return nil
+}
+
+func GetWindowText(handle uintptr) (string, error) {
+	buffer := make([]uint16, 256)
+
+	ret, _, err := syscall.SyscallN(
+		getWindowText.Addr(),
+		handle,
+		uintptr(unsafe.Pointer(&buffer[0])),
+		uintptr(len(buffer)),
+	)
+
+	if ret == 0 {
+		return "", errnoErr(err)
+	}
+
+	return syscall.UTF16ToString(buffer[:ret]), nil
 }
