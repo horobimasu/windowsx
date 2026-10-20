@@ -8,15 +8,16 @@ import (
 var (
 	user32 = syscall.NewLazyDLL("user32.dll")
 
-	setCursorPos       = user32.NewProc("SetCursorPos")
-	blockInput         = user32.NewProc("BlockInput")
-	setWinEventHook    = user32.NewProc("SetWinEventHook")
-	unhookWinEvent     = user32.NewProc("UnhookWinEvent")
-	getClassNameW      = user32.NewProc("GetClassNameW")
-	getMessageW        = user32.NewProc("GetMessageW")
-	peekMessageW       = user32.NewProc("PeekMessageW")
-	postThreadMessageW = user32.NewProc("PostThreadMessageW")
-	getWindowText      = user32.NewProc("GetWindowTextW")
+	setCursorPos        = user32.NewProc("SetCursorPos")
+	blockInput          = user32.NewProc("BlockInput")
+	setWinEventHook     = user32.NewProc("SetWinEventHook")
+	unhookWinEvent      = user32.NewProc("UnhookWinEvent")
+	getClassNameW       = user32.NewProc("GetClassNameW")
+	getMessageW         = user32.NewProc("GetMessageW")
+	peekMessageW        = user32.NewProc("PeekMessageW")
+	postThreadMessageW  = user32.NewProc("PostThreadMessageW")
+	getWindowText       = user32.NewProc("GetWindowTextW")
+	getWindowTextLength = user32.NewProc("GetWindowTextLengthW")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -159,4 +160,9 @@ func GetWindowText(handle uintptr) (string, error) {
 	}
 
 	return syscall.UTF16ToString(buffer[:ret]), nil
+}
+
+func GetWindowTextLength(handle uintptr) int {
+	ret, _, _ := syscall.SyscallN(getWindowTextLength.Addr(), handle)
+	return int(ret)
 }
