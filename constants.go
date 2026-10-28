@@ -126,3 +126,135 @@ const (
 	PM_REMOVE   uint32 = 0x0001
 	PM_NOYIELD  uint32 = 0x0002
 )
+
+const (
+	SM_ARRANGE                     uint32 = 56
+	SM_CLEANBOOT                   uint32 = 67
+	SM_CMONITORS                   uint32 = 80
+	SM_CMOUSEBUTTONS               uint32 = 43
+	SM_CONVERTIBLESLATEMODE        uint32 = 0x2003
+	SM_CXBORDER                    uint32 = 5
+	SM_CXCURSOR                    uint32 = 13
+	SM_CXDLGFRAME                  uint32 = 7
+	SM_CXDOUBLECLK                 uint32 = 36
+	SM_CXDRAG                      uint32 = 68
+	SM_CXEDGE                      uint32 = 45
+	SM_CXFIXEDFRAME                uint32 = 7
+	SM_CXFOCUSBORDER               uint32 = 83
+	SM_CXFRAME                     uint32 = 32
+	SM_CXFULLSCREEN                uint32 = 16
+	SM_CXHSCROLL                   uint32 = 21
+	SM_CXHTHUMB                    uint32 = 10
+	SM_CXICON                      uint32 = 11
+	SM_CXICONSPACING               uint32 = 38
+	SM_CXMAXIMIZED                 uint32 = 61
+	SM_CXMAXTRACK                  uint32 = 59
+	SM_CXMENUCHECK                 uint32 = 71
+	SM_CXMENUSIZE                  uint32 = 54
+	SM_CXMIN                       uint32 = 28
+	SM_CXMINIMIZED                 uint32 = 57
+	SM_CXMINSPACING                uint32 = 47
+	SM_CXMINTRACK                  uint32 = 34
+	SM_CXPADDEDBORDER              uint32 = 92
+	SM_CXSCREEN                    uint32 = 0
+	SM_CXSIZE                      uint32 = 30
+	SM_CXSIZEFRAME                 uint32 = 32
+	SM_CXSMICON                    uint32 = 49
+	SM_CXSMSIZE                    uint32 = 52
+	SM_CXVIRTUALSCREEN             uint32 = 78
+	SM_CXVSCROLL                   uint32 = 2
+	SM_CYBORDER                    uint32 = 6
+	SM_CYCAPTION                   uint32 = 4
+	SM_CYCURSOR                    uint32 = 14
+	SM_CYDLGFRAME                  uint32 = 8
+	SM_CYDOUBLECLK                 uint32 = 37
+	SM_CYDRAG                      uint32 = 69
+	SM_CYEDGE                      uint32 = 46
+	SM_CYFIXEDFRAME                uint32 = 8
+	SM_CYFOCUSBORDER               uint32 = 84
+	SM_CYFRAME                     uint32 = 33
+	SM_CYFULLSCREEN                uint32 = 17
+	SM_CYHSCROLL                   uint32 = 3
+	SM_CYICON                      uint32 = 12
+	SM_CYICONSPACING               uint32 = 39
+	SM_CYKANJIWINDOW               uint32 = 18
+	SM_CYMAXIMIZED                 uint32 = 62
+	SM_CYMAXTRACK                  uint32 = 60
+	SM_CYMENU                      uint32 = 15
+	SM_CYMENUCHECK                 uint32 = 72
+	SM_CYMENUSIZE                  uint32 = 55
+	SM_CYMIN                       uint32 = 29
+	SM_CYMINIMIZED                 uint32 = 58
+	SM_CYMINSPACING                uint32 = 48
+	SM_CYMINTRACK                  uint32 = 35
+	SM_CYSCREEN                    uint32 = 1
+	SM_CYSIZE                      uint32 = 31
+	SM_CYSIZEFRAME                 uint32 = 33
+	SM_CYSMCAPTION                 uint32 = 51
+	SM_CYSMICON                    uint32 = 50
+	SM_CYSMSIZE                    uint32 = 53
+	SM_CYVIRTUALSCREEN             uint32 = 79
+	SM_CYVSCROLL                   uint32 = 20
+	SM_CYVTHUMB                    uint32 = 9
+	SM_DBCSENABLED                 uint32 = 42
+	SM_DEBUG                       uint32 = 22
+	SM_DIGITIZER                   uint32 = 94
+	SM_IMMENABLED                  uint32 = 82
+	SM_MAXIMUMTOUCHES              uint32 = 95
+	SM_MEDIACENTER                 uint32 = 87
+	SM_MENUDROPALIGNMENT           uint32 = 40
+	SM_MIDEASTENABLED              uint32 = 74
+	SM_MOUSEPRESENT                uint32 = 19
+	SM_MOUSEHORIZONTALWHEELPRESENT uint32 = 91
+	SM_MOUSEWHEELPRESENT           uint32 = 75
+	SM_NETWORK                     uint32 = 63
+	SM_PENWINDOWS                  uint32 = 41
+	SM_REMOTECONTROL               uint32 = 0x2001
+	SM_REMOTESESSION               uint32 = 0x1000
+	SM_SAMEDISPLAYFORMAT           uint32 = 81
+	SM_SECURE                      uint32 = 44
+	SM_SERVERR2                    uint32 = 89
+	SM_SHOWSOUNDS                  uint32 = 70
+	SM_SHUTTINGDOWN                uint32 = 0x2000
+	SM_SLOWMACHINE                 uint32 = 73
+	SM_STARTER                     uint32 = 88
+	SM_SWAPBUTTON                  uint32 = 23
+	SM_SYSTEMDOCKED                uint32 = 0x2004
+	SM_TABLETPC                    uint32 = 86
+	SM_XVIRTUALSCREEN              uint32 = 76
+	SM_YVIRTUALSCREEN              uint32 = 77
+)
+
+const (
+	NID_INTEGRATED_TOUCH uint32 = 0x01
+	NID_EXTERNAL_TOUCH   uint32 = 0x02
+	NID_INTEGRATED_PEN   uint32 = 0x04
+	NID_EXTERNAL_PEN     uint32 = 0x08
+	NID_MULTI_INPUT      uint32 = 0x40
+	NID_READY            uint32 = 0x80
+)
+
+const (
+	HWND_BOTTOM    = uintptr(1)
+	HWND_NOTOPMOST = ^uintptr(1)
+	HWND_TOP       = uintptr(0)
+	HWND_TOPMOST   = ^uintptr(0)
+)
+
+const (
+	SWP_ASYNCWINDOWPOS uint32 = 0x4000
+	SWP_DEFERERASE     uint32 = 0x2000
+	SWP_DRAWFRAME      uint32 = 0x0020
+	SWP_FRAMECHANGED   uint32 = 0x0020
+	SWP_HIDEWINDOW     uint32 = 0x0080
+	SWP_NOACTIVATE     uint32 = 0x0010
+	SWP_NOCOPYBITS     uint32 = 0x0100
+	SWP_NOMOVE         uint32 = 0x0002
+	SWP_NOOWNERZORDER  uint32 = 0x0200
+	SWP_NOREDRAW       uint32 = 0x0008
+	SWP_NOREPOSITION   uint32 = 0x0200
+	SWP_NOSENDCHANGING uint32 = 0x0400
+	SWP_NOSIZE         uint32 = 0x0001
+	SWP_NOZORDER       uint32 = 0x0004
+	SWP_SHOWWINDOW     uint32 = 0x0040
+)

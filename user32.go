@@ -8,16 +8,21 @@ import (
 var (
 	user32 = syscall.NewLazyDLL("user32.dll")
 
-	setCursorPos        = user32.NewProc("SetCursorPos")
-	blockInput          = user32.NewProc("BlockInput")
-	setWinEventHook     = user32.NewProc("SetWinEventHook")
-	unhookWinEvent      = user32.NewProc("UnhookWinEvent")
-	getClassNameW       = user32.NewProc("GetClassNameW")
-	getMessageW         = user32.NewProc("GetMessageW")
-	peekMessageW        = user32.NewProc("PeekMessageW")
-	postThreadMessageW  = user32.NewProc("PostThreadMessageW")
-	getWindowText       = user32.NewProc("GetWindowTextW")
-	getWindowTextLength = user32.NewProc("GetWindowTextLengthW")
+	setCursorPos         = user32.NewProc("SetCursorPos")
+	blockInput           = user32.NewProc("BlockInput")
+	setWinEventHook      = user32.NewProc("SetWinEventHook")
+	unhookWinEvent       = user32.NewProc("UnhookWinEvent")
+	getClassNameW        = user32.NewProc("GetClassNameW")
+	getMessageW          = user32.NewProc("GetMessageW")
+	peekMessageW         = user32.NewProc("PeekMessageW")
+	postThreadMessageW   = user32.NewProc("PostThreadMessageW")
+	getWindowTextW       = user32.NewProc("GetWindowTextW")
+	getWindowTextLengthW = user32.NewProc("GetWindowTextLengthW")
+	findWindowW          = user32.NewProc("FindWindowW")
+	setWindowTextW       = user32.NewProc("SetWindowTextW")
+	moveWindow           = user32.NewProc("MoveWindow")
+	setWindowPos         = user32.NewProc("SetWindowPos")
+	getSystemMetrics     = user32.NewProc("GetSystemMetrics")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -149,7 +154,7 @@ func GetWindowText(handle uintptr) (string, error) {
 	buffer := make([]uint16, 256)
 
 	ret, _, err := syscall.SyscallN(
-		getWindowText.Addr(),
+		getWindowTextW.Addr(),
 		handle,
 		uintptr(unsafe.Pointer(&buffer[0])),
 		uintptr(len(buffer)),
@@ -162,7 +167,87 @@ func GetWindowText(handle uintptr) (string, error) {
 	return syscall.UTF16ToString(buffer[:ret]), nil
 }
 
-func GetWindowTextLength(handle uintptr) int {
-	ret, _, _ := syscall.SyscallN(getWindowTextLength.Addr(), handle)
-	return int(ret)
+func GetWindowTextLength(handle uintptr) int32 {
+	ret, _, _ := syscall.SyscallN(getWindowTextLengthW.Addr(), handle)
+	return int32(ret)
+}
+
+func FindWindow(className *uint16, windowName *uint16) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(
+		findWindowW.Addr(),
+		uintptr(unsafe.Pointer(className)),
+		uintptr(unsafe.Pointer(windowName)),
+	)
+
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func SetWindowText(handle uintptr, text *uint16) error {
+	ret, _, err := syscall.SyscallN(
+		setWindowTextW.Addr(),
+		handle,
+		uintptr(unsafe.Pointer(text)),
+	)
+
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func MoveWindow(handle uintptr, x int32, y int32, width int32, height int32, repaint bool) error {
+	shouldRepain := toWinBOOL(repaint)
+
+	ret, _, err := syscall.SyscallN(
+		moveWindow.Addr(),
+		handle,
+		uintptr(x),
+		uintptr(y),
+		uintptr(width),
+		uintptr(height),
+		uintptr(shouldRepain),
+	)
+
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func SetWindowPos(
+	handle uintptr,
+	insertAfter uintptr,
+	x int32,
+	y int32,
+	width int32,
+	height int32,
+	flags uint32,
+) error {
+	ret, _, err := syscall.SyscallN(
+		setWindowPos.Addr(),
+		handle,
+		insertAfter,
+		uintptr(x),
+		uintptr(y),
+		uintptr(width),
+		uintptr(height),
+		uintptr(flags),
+	)
+
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GetSystemMetrics(index uint32) int32 {
+	ret, _, _ := syscall.SyscallN(getSystemMetrics.Addr(), uintptr(index))
+	return int32(ret)
 }
