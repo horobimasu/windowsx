@@ -23,6 +23,7 @@ var (
 	moveWindow           = user32.NewProc("MoveWindow")
 	setWindowPos         = user32.NewProc("SetWindowPos")
 	getSystemMetrics     = user32.NewProc("GetSystemMetrics")
+	getWindowRect        = user32.NewProc("GetWindowRect")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -250,4 +251,20 @@ func SetWindowPos(
 func GetSystemMetrics(index uint32) int32 {
 	ret, _, _ := syscall.SyscallN(getSystemMetrics.Addr(), uintptr(index))
 	return int32(ret)
+}
+
+func GetWindowRect(handle uintptr) (Rect, error) {
+	var rect Rect
+
+	ret, _, err := syscall.SyscallN(
+		getWindowRect.Addr(),
+		handle,
+		uintptr(unsafe.Pointer(&rect)),
+	)
+
+	if ret == 0 {
+		return rect, errnoErr(err)
+	}
+
+	return rect, nil
 }
