@@ -20,3 +20,8 @@ type Rect struct {
 	Right  int32
 	Bottom int32
 }
+
+type FindStreamData struct {
+	StreamSize int64
+	StreamName [260 + 36]uint16
+}
