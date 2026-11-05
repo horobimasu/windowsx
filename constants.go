@@ -288,3 +288,8 @@ const (
 	WS_EX_TRANSPARENT         uint32 = 0x00000020
 	WS_EX_WINDOWEDGE          uint32 = 0x00000100
 )
+
+const (
+	FindStreamInfoStandard     uint32 = 0
+	FindStreamInfoMaxInfoLevel uint32 = 1
+)
