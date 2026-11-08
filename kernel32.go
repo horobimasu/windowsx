@@ -153,7 +153,7 @@ func EnumResourceNames(handle uintptr, kind uint32, callback uintptr, lParam uin
 	return nil
 }
 
-func FindResource(handle uintptr, name *uintptr, kind uint32) (uintptr, error) {
+func FindResource(handle uintptr, name *uint16, kind uint32) (uintptr, error) {
 	ret, _, err := syscall.SyscallN(
 		findResourceW.Addr(),
 		handle,
