@@ -293,3 +293,27 @@ const (
 	FindStreamInfoStandard     uint32 = 0
 	FindStreamInfoMaxInfoLevel uint32 = 1
 )
+
+const (
+	RT_ACCELERATOR  uint32 = 9
+	RT_ANICURSOR    uint32 = 21
+	RT_ANIICON      uint32 = 22
+	RT_BITMAP       uint32 = 2
+	RT_CURSOR       uint32 = 1
+	RT_DIALOG       uint32 = 5
+	RT_DLGINCLUDE   uint32 = 17
+	RT_FONT         uint32 = 8
+	RT_FONTDIR      uint32 = 7
+	RT_GROUP_CURSOR uint32 = (RT_CURSOR) + 11
+	RT_GROUP_ICON   uint32 = (RT_ICON) + 11
+	RT_HTML         uint32 = 23
+	RT_ICON         uint32 = 3
+	RT_MANIFEST     uint32 = 24
+	RT_MENU         uint32 = 4
+	RT_MESSAGETABLE uint32 = 11
+	RT_PLUGPLAY     uint32 = 19
+	RT_RCDATA       uint32 = 10
+	RT_STRING       uint32 = 6
+	RT_VERSION      uint32 = 16
+	RT_VXD          uint32 = 20
+)

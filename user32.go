@@ -36,9 +36,7 @@ func SetCursorPosition(x int, y int) error {
 }
 
 func BlockInput(block bool) error {
-	blockIt := toWinBOOL(block)
-
-	ret, _, err := syscall.SyscallN(blockInput.Addr(), uintptr(blockIt))
+	ret, _, err := syscall.SyscallN(blockInput.Addr(), toWinBOOL(block))
 	if ret == 0 {
 		return errnoErr(err)
 	}
@@ -202,8 +200,6 @@ func SetWindowText(handle uintptr, text *uint16) error {
 }
 
 func MoveWindow(handle uintptr, x int32, y int32, width int32, height int32, repaint bool) error {
-	shouldRepain := toWinBOOL(repaint)
-
 	ret, _, err := syscall.SyscallN(
 		moveWindow.Addr(),
 		handle,
@@ -211,7 +207,7 @@ func MoveWindow(handle uintptr, x int32, y int32, width int32, height int32, rep
 		uintptr(y),
 		uintptr(width),
 		uintptr(height),
-		uintptr(shouldRepain),
+		toWinBOOL(repaint),
 	)
 
 	if ret == 0 {

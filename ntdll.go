@@ -14,16 +14,13 @@ var (
 )
 
 func RtlSetProcessIsCritical(setCritical bool, lastStatus *bool, check bool) error {
-	newValue := toWinBOOL(setCritical)
-	checkFlag := toWinBOOL(check)
-
 	var oldValue int
 
 	ret, _, err := syscall.SyscallN(
 		rtlSetProcessIsCritical.Addr(),
-		uintptr(newValue),
+		toWinBOOL(setCritical),
 		uintptr(unsafe.Pointer(&oldValue)),
-		uintptr(checkFlag),
+		toWinBOOL(check),
 	)
 
 	if ret == 0 {
@@ -38,16 +35,13 @@ func RtlSetProcessIsCritical(setCritical bool, lastStatus *bool, check bool) err
 }
 
 func RtlAdjustPrivilege(privilege uint32, enable bool, onThread bool, lastStatus *bool) error {
-	enableIt := toWinBOOL(enable)
-	adjustThread := toWinBOOL(onThread)
-
 	var wasEnabled int
 
 	ret, _, err := syscall.SyscallN(
 		rtlAdjustPrivilege.Addr(),
 		uintptr(privilege),
-		uintptr(enableIt),
-		uintptr(adjustThread),
+		toWinBOOL(enable),
+		toWinBOOL(onThread),
 		uintptr(unsafe.Pointer(&wasEnabled)),
 	)
 
