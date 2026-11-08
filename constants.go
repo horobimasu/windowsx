@@ -290,8 +290,8 @@ const (
 )
 
 const (
-	FindStreamInfoStandard     uint32 = 0
-	FindStreamInfoMaxInfoLevel uint32 = 1
+	FIND_STREAM_INFO_STANDARD       uint32 = 0 // FindStreamInfoStandard
+	FIND_STREAM_INFO_MAX_INFO_LEVEL uint32 = 1 // FindStreamInfoMaxInfoLevel
 )
 
 const (

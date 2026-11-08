@@ -14,6 +14,11 @@ var (
 	updateResourceW        = kernel32.NewProc("UpdateResourceW")
 	endUpdateResourceW     = kernel32.NewProc("EndUpdateResourceW")
 	enumResourceLanguagesW = kernel32.NewProc("EnumResourceLanguagesW")
+	enumResourceNamesW     = kernel32.NewProc("EnumResourceNamesW")
+	findResourceW          = kernel32.NewProc("FindResourceW")
+	loadResource           = kernel32.NewProc("LoadResource")
+	lockResource           = kernel32.NewProc("LockResource")
+	sizeofResource         = kernel32.NewProc("SizeofResource")
 )
 
 func FindFirstStream(
@@ -130,4 +135,62 @@ func EnumResourceLanguages(
 	}
 
 	return nil
+}
+
+func EnumResourceNames(handle uintptr, kind uint32, callback uintptr, lParam uintptr) error {
+	ret, _, err := syscall.SyscallN(
+		enumResourceNamesW.Addr(),
+		handle,
+		uintptr(kind),
+		callback,
+		lParam,
+	)
+
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func FindResource(handle uintptr, name *uintptr, kind uint32) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(
+		findResourceW.Addr(),
+		handle,
+		uintptr(unsafe.Pointer(name)),
+		uintptr(kind),
+	)
+
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func LoadResource(handle uintptr, info uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(loadResource.Addr(), handle, info)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func LockResource(resource uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(lockResource.Addr(), resource)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func SizeOfResource(handle uintptr, resource uintptr) (uint32, error) {
+	ret, _, err := syscall.SyscallN(sizeofResource.Addr(), handle, resource)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return uint32(ret), nil
 }
