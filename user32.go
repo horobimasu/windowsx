@@ -24,6 +24,11 @@ var (
 	setWindowPos         = user32.NewProc("SetWindowPos")
 	getSystemMetrics     = user32.NewProc("GetSystemMetrics")
 	getWindowRect        = user32.NewProc("GetWindowRect")
+	openClipboard        = user32.NewProc("OpenClipboard")
+	closeClipboard       = user32.NewProc("CloseClipboard")
+	emptyClipboard       = user32.NewProc("EmptyClipboard")
+	setClipboardData     = user32.NewProc("SetClipboardData")
+	getClipboardData     = user32.NewProc("GetClipboardData")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -263,4 +268,49 @@ func GetWindowRect(handle uintptr) (Rect, error) {
 	}
 
 	return rect, nil
+}
+
+func OpenClipboard(handle uintptr) error {
+	ret, _, err := syscall.SyscallN(openClipboard.Addr(), handle)
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func CloseClipboard() error {
+	ret, _, err := syscall.SyscallN(closeClipboard.Addr())
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func EmptyClipboard() error {
+	ret, _, err := syscall.SyscallN(emptyClipboard.Addr())
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func SetClipboardData(format uint32, handle uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(setClipboardData.Addr(), uintptr(format), handle)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func GetClipboardData(format uint32) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(getClipboardData.Addr(), uintptr(format))
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
 }

@@ -19,6 +19,10 @@ var (
 	loadResource           = kernel32.NewProc("LoadResource")
 	lockResource           = kernel32.NewProc("LockResource")
 	sizeofResource         = kernel32.NewProc("SizeofResource")
+	globalAlloc            = kernel32.NewProc("GlobalAlloc")
+	globalFree             = kernel32.NewProc("GlobalFree")
+	globalUnlock           = kernel32.NewProc("GlobalUnlock")
+	globalLock             = kernel32.NewProc("GlobalLock")
 )
 
 func FindFirstStream(
@@ -193,4 +197,42 @@ func SizeOfResource(handle uintptr, resource uintptr) (uint32, error) {
 	}
 
 	return uint32(ret), nil
+}
+
+func GlobalAlloc(flags uint32, size uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(globalAlloc.Addr(), uintptr(flags), size)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func GlobalFree(flags uint32, size uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(globalFree.Addr(), uintptr(flags), size)
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func GlobalUnlock(handle uintptr) error {
+	ret, _, err := syscall.SyscallN(globalUnlock.Addr(), handle)
+	if ret == 0 && err != 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GlobalLock(handle uintptr) (unsafe.Pointer, error) {
+	ret, _, err := syscall.SyscallN(globalLock.Addr(), handle)
+
+	ptr := unsafe.Pointer(ret)
+	if ptr == nil {
+		return nil, errnoErr(err)
+	}
+
+	return ptr, nil
 }
