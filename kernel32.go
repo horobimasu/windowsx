@@ -23,6 +23,7 @@ var (
 	globalFree             = kernel32.NewProc("GlobalFree")
 	globalUnlock           = kernel32.NewProc("GlobalUnlock")
 	globalLock             = kernel32.NewProc("GlobalLock")
+	globalSize             = kernel32.NewProc("GlobalSize")
 )
 
 func FindFirstStream(
@@ -235,4 +236,13 @@ func GlobalLock(handle uintptr) (unsafe.Pointer, error) {
 	}
 
 	return ptr, nil
+}
+
+func GlobalSize(handle uintptr) (int32, error) {
+	ret, _, err := syscall.SyscallN(globalSize.Addr(), handle)
+	if ret == 0 && err != 0 {
+		return 0, errnoErr(err)
+	}
+
+	return int32(ret), nil
 }

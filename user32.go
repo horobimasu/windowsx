@@ -8,27 +8,28 @@ import (
 var (
 	user32 = syscall.NewLazyDLL("user32.dll")
 
-	setCursorPos         = user32.NewProc("SetCursorPos")
-	blockInput           = user32.NewProc("BlockInput")
-	setWinEventHook      = user32.NewProc("SetWinEventHook")
-	unhookWinEvent       = user32.NewProc("UnhookWinEvent")
-	getClassNameW        = user32.NewProc("GetClassNameW")
-	getMessageW          = user32.NewProc("GetMessageW")
-	peekMessageW         = user32.NewProc("PeekMessageW")
-	postThreadMessageW   = user32.NewProc("PostThreadMessageW")
-	getWindowTextW       = user32.NewProc("GetWindowTextW")
-	getWindowTextLengthW = user32.NewProc("GetWindowTextLengthW")
-	findWindowW          = user32.NewProc("FindWindowW")
-	setWindowTextW       = user32.NewProc("SetWindowTextW")
-	moveWindow           = user32.NewProc("MoveWindow")
-	setWindowPos         = user32.NewProc("SetWindowPos")
-	getSystemMetrics     = user32.NewProc("GetSystemMetrics")
-	getWindowRect        = user32.NewProc("GetWindowRect")
-	openClipboard        = user32.NewProc("OpenClipboard")
-	closeClipboard       = user32.NewProc("CloseClipboard")
-	emptyClipboard       = user32.NewProc("EmptyClipboard")
-	setClipboardData     = user32.NewProc("SetClipboardData")
-	getClipboardData     = user32.NewProc("GetClipboardData")
+	setCursorPos             = user32.NewProc("SetCursorPos")
+	blockInput               = user32.NewProc("BlockInput")
+	setWinEventHook          = user32.NewProc("SetWinEventHook")
+	unhookWinEvent           = user32.NewProc("UnhookWinEvent")
+	getClassNameW            = user32.NewProc("GetClassNameW")
+	getMessageW              = user32.NewProc("GetMessageW")
+	peekMessageW             = user32.NewProc("PeekMessageW")
+	postThreadMessageW       = user32.NewProc("PostThreadMessageW")
+	getWindowTextW           = user32.NewProc("GetWindowTextW")
+	getWindowTextLengthW     = user32.NewProc("GetWindowTextLengthW")
+	findWindowW              = user32.NewProc("FindWindowW")
+	setWindowTextW           = user32.NewProc("SetWindowTextW")
+	moveWindow               = user32.NewProc("MoveWindow")
+	setWindowPos             = user32.NewProc("SetWindowPos")
+	getSystemMetrics         = user32.NewProc("GetSystemMetrics")
+	getWindowRect            = user32.NewProc("GetWindowRect")
+	openClipboard            = user32.NewProc("OpenClipboard")
+	closeClipboard           = user32.NewProc("CloseClipboard")
+	emptyClipboard           = user32.NewProc("EmptyClipboard")
+	setClipboardData         = user32.NewProc("SetClipboardData")
+	getClipboardData         = user32.NewProc("GetClipboardData")
+	registerClipboardFormatW = user32.NewProc("RegisterClipboardFormatW")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -313,4 +314,13 @@ func GetClipboardData(format uint32) (uintptr, error) {
 	}
 
 	return ret, nil
+}
+
+func RegisterClipboardFormat(name *uint16) (uint32, error) {
+	ret, _, err := syscall.SyscallN(registerClipboardFormatW.Addr(), uintptr(unsafe.Pointer(name)))
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return uint32(ret), nil
 }
