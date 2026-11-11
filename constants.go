@@ -356,13 +356,13 @@ const (
 )
 
 const (
-	IDABORT    uint32 = 3
-	IDCANCEL   uint32 = 2
-	IDCONTINUE uint32 = 11
-	IDIGNORE   uint32 = 5
-	IDNO       uint32 = 7
-	IDOK       uint32 = 1
-	IDRETRY    uint32 = 4
-	IDTRYAGAIN uint32 = 10
-	IDYES      uint32 = 6
+	IDABORT    int32 = 3
+	IDCANCEL   int32 = 2
+	IDCONTINUE int32 = 11
+	IDIGNORE   int32 = 5
+	IDNO       int32 = 7
+	IDOK       int32 = 1
+	IDRETRY    int32 = 4
+	IDTRYAGAIN int32 = 10
+	IDYES      int32 = 6
 )
