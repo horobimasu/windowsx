@@ -354,3 +354,15 @@ const (
 	GMEM_ZEROINIT uint32 = 0x0040
 	GPTR          uint32 = 0x0040
 )
+
+const (
+	IDABORT    uint32 = 3
+	IDCANCEL   uint32 = 2
+	IDCONTINUE uint32 = 11
+	IDIGNORE   uint32 = 5
+	IDNO       uint32 = 7
+	IDOK       uint32 = 1
+	IDRETRY    uint32 = 4
+	IDTRYAGAIN uint32 = 10
+	IDYES      uint32 = 6
+)
