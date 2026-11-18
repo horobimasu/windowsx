@@ -30,6 +30,8 @@ var (
 	setClipboardData         = user32.NewProc("SetClipboardData")
 	getClipboardData         = user32.NewProc("GetClipboardData")
 	registerClipboardFormatW = user32.NewProc("RegisterClipboardFormatW")
+	enumDisplaySettingsW     = user32.NewProc("EnumDisplaySettingsW")
+	changeDisplaySettingsExW = user32.NewProc("ChangeDisplaySettingsExW")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -323,4 +325,38 @@ func RegisterClipboardFormat(name *uint16) (uint32, error) {
 	}
 
 	return uint32(ret), nil
+}
+
+func EnumDisplaySettings(deviceName *uint16, mode uint32, device *DeviceMode) error {
+	ret, _, err := syscall.SyscallN(
+		enumDisplaySettingsW.Addr(),
+		uintptr(unsafe.Pointer(deviceName)),
+		uintptr(mode),
+		uintptr(unsafe.Pointer(device)),
+	)
+
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func ChangeDisplaySettingsEx(
+	deviceName *uint16,
+	device *DeviceMode,
+	handle uintptr,
+	flags uint32,
+	lParam uintptr,
+) int32 {
+	ret, _, _ := syscall.SyscallN(
+		changeDisplaySettingsExW.Addr(),
+		uintptr(unsafe.Pointer(deviceName)),
+		uintptr(unsafe.Pointer(device)),
+		handle,
+		uintptr(flags),
+		lParam,
+	)
+
+	return int32(ret)
 }
