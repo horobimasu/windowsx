@@ -209,9 +209,9 @@ func GlobalAlloc(flags uint32, size uintptr) (uintptr, error) {
 	return ret, nil
 }
 
-func GlobalFree(flags uint32, size uintptr) (uintptr, error) {
-	ret, _, err := syscall.SyscallN(globalFree.Addr(), uintptr(flags), size)
-	if ret == 0 {
+func GlobalFree(handle uintptr) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(globalFree.Addr(), handle)
+	if ret != 0 {
 		return 0, errnoErr(err)
 	}
 
