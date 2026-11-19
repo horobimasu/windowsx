@@ -12,7 +12,6 @@ var (
 	blockInput               = user32.NewProc("BlockInput")
 	setWinEventHook          = user32.NewProc("SetWinEventHook")
 	unhookWinEvent           = user32.NewProc("UnhookWinEvent")
-	getClassNameW            = user32.NewProc("GetClassNameW")
 	getMessageW              = user32.NewProc("GetMessageW")
 	peekMessageW             = user32.NewProc("PeekMessageW")
 	postThreadMessageW       = user32.NewProc("PostThreadMessageW")
@@ -86,23 +85,6 @@ func UnhookEvent(hook uintptr) error {
 	}
 
 	return nil
-}
-
-func GetClassName(handle uintptr) (string, error) {
-	buffer := make([]uint16, 256)
-
-	ret, _, err := syscall.SyscallN(
-		getClassNameW.Addr(),
-		handle,
-		uintptr(unsafe.Pointer(&buffer[0])),
-		uintptr(len(buffer)),
-	)
-
-	if ret == 0 {
-		return "", errnoErr(err)
-	}
-
-	return syscall.UTF16ToString(buffer[:ret]), nil
 }
 
 func GetMessage(message *Msg, handle uintptr, filterMin uint32, filterMax uint32) (int32, error) {
