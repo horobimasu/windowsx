@@ -31,6 +31,7 @@ var (
 	registerClipboardFormatW = user32.NewProc("RegisterClipboardFormatW")
 	enumDisplaySettingsW     = user32.NewProc("EnumDisplaySettingsW")
 	changeDisplaySettingsExW = user32.NewProc("ChangeDisplaySettingsExW")
+	postMessageW             = user32.NewProc("PostMessageW")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -341,4 +342,13 @@ func ChangeDisplaySettingsEx(
 	)
 
 	return int32(ret)
+}
+
+func PostMessage(handle uintptr, message uint32, wParam uintptr, lParam uintptr) error {
+	ret, _, err := syscall.SyscallN(postMessageW.Addr(), handle, uintptr(message), wParam, lParam)
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
 }
