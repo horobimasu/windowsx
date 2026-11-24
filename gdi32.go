@@ -37,7 +37,7 @@ func CreateDibSection(
 		handle,
 		uintptr(unsafe.Pointer(info)),
 		uintptr(usage),
-		uintptr(unsafe.Pointer(&bits)),
+		uintptr(unsafe.Pointer(bits)),
 		section,
 		uintptr(offset),
 	)
