@@ -32,6 +32,10 @@ var (
 	enumDisplaySettingsW     = user32.NewProc("EnumDisplaySettingsW")
 	changeDisplaySettingsExW = user32.NewProc("ChangeDisplaySettingsExW")
 	postMessageW             = user32.NewProc("PostMessageW")
+	setProcessDPIAware       = user32.NewProc("SetProcessDPIAware")
+	getCursorInfo            = user32.NewProc("GetCursorInfo")
+	getIconInfo              = user32.NewProc("GetIconInfo")
+	drawIconEx               = user32.NewProc("DrawIconEx")
 )
 
 func SetCursorPosition(x int, y int) error {
@@ -346,6 +350,65 @@ func ChangeDisplaySettingsEx(
 
 func PostMessage(handle uintptr, message uint32, wParam uintptr, lParam uintptr) error {
 	ret, _, err := syscall.SyscallN(postMessageW.Addr(), handle, uintptr(message), wParam, lParam)
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func SetProcessDPIAware() error {
+	ret, _, err := syscall.SyscallN(setProcessDPIAware.Addr())
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GetCursorInfo(info *CursorInfo) error {
+	info.Size = uint32(unsafe.Sizeof(*info))
+
+	ret, _, err := syscall.SyscallN(getCursorInfo.Addr(), uintptr(unsafe.Pointer(info)))
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GetIconInfo(icon uintptr, info *IconInfo) error {
+	ret, _, err := syscall.SyscallN(getIconInfo.Addr(), icon, uintptr(unsafe.Pointer(info)))
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func DrawIconEx(
+	handle uintptr,
+	left int32,
+	top int32,
+	icon uintptr,
+	xWidth int32,
+	yWidth int32,
+	animated uint32,
+	flickerFree uintptr,
+	flags uint32,
+) error {
+	ret, _, err := syscall.SyscallN(
+		drawIconEx.Addr(),
+		uintptr(left),
+		uintptr(top),
+		icon,
+		uintptr(xWidth),
+		uintptr(yWidth),
+		uintptr(animated),
+		flickerFree,
+		uintptr(flags),
+	)
+
 	if ret == 0 {
 		return errnoErr(err)
 	}

@@ -707,3 +707,17 @@ const (
 	WM_USER                           uint32 = 0x0400
 	WM_APP                            uint32 = 0x8000
 )
+
+const (
+	CURSOR_SHOWING    uint32 = 0x00000001
+	CURSOR_SUPPRESSED uint32 = 0x00000002
+)
+
+const (
+	DI_COMPAT      uint32 = 0x0004
+	DI_DEFAULTSIZE uint32 = 0x0008
+	DI_IMAGE       uint32 = 0x0002
+	DI_MASK        uint32 = 0x0001
+	DI_NOMIRROR    uint32 = 0x0010
+	DI_NORMAL      uint32 = 0x0003
+)

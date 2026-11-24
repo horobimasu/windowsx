@@ -49,3 +49,32 @@ type DeviceMode struct { // DEVMODEW
 	DisplayFlags       uint32
 	DisplayFrequency   uint32
 }
+
+type CursorInfo struct { // CURSORINFO
+	Size      uint32
+	Flags     uint32
+	Cursor    uintptr
+	ScreenPos Point
+}
+
+type IconInfo struct { // ICONINFO
+	Icon     uint32
+	XHotspot uint32
+	YHotspot uint32
+	Mask     uintptr
+	Color    uintptr
+}
+
+type BitmapInfoHeader struct { // BITMAPINFOHEADER
+	Size         uint32
+	Width        int32
+	Height       int32
+	Planes       uint16
+	BitCount     uint16
+	Compression  uint32
+	SizeImage    uint32
+	XPels        int32
+	YPels        int32
+	ClrUsed      uint32
+	ClrImportant uint32
+}
