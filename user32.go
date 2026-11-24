@@ -315,6 +315,9 @@ func RegisterClipboardFormat(name *uint16) (uint32, error) {
 }
 
 func EnumDisplaySettings(deviceName *uint16, mode uint32, device *DeviceMode) error {
+	device.Size = uint16(unsafe.Sizeof(*device))
+	device.DriverExtra = 0
+
 	ret, _, err := syscall.SyscallN(
 		enumDisplaySettingsW.Addr(),
 		uintptr(unsafe.Pointer(deviceName)),
