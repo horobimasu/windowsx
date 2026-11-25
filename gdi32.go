@@ -28,7 +28,7 @@ func CreateDibSection(
 	handle uintptr,
 	info *BitmapInfoHeader,
 	usage uint32,
-	bits unsafe.Pointer,
+	bits *unsafe.Pointer,
 	section uintptr,
 	offset uint32,
 ) (uintptr, error) {
