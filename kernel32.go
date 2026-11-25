@@ -24,6 +24,8 @@ var (
 	globalUnlock           = kernel32.NewProc("GlobalUnlock")
 	globalLock             = kernel32.NewProc("GlobalLock")
 	globalSize             = kernel32.NewProc("GlobalSize")
+	freeConsole            = kernel32.NewProc("FreeConsole")
+	attachConsole          = kernel32.NewProc("AttachConsole")
 )
 
 func FindFirstStream(
@@ -245,4 +247,22 @@ func GlobalSize(handle uintptr) (int32, error) {
 	}
 
 	return int32(ret), nil
+}
+
+func FreeConsole() error {
+	ret, _, err := syscall.SyscallN(freeConsole.Addr())
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func AttachConsole(pid uint32) error {
+	ret, _, err := syscall.SyscallN(attachConsole.Addr(), uintptr(pid))
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
 }

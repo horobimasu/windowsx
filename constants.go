@@ -721,3 +721,5 @@ const (
 	DI_NOMIRROR    uint32 = 0x0010
 	DI_NORMAL      uint32 = 0x0003
 )
+
+const ATTACH_PARENT_PROCESS = ^uint32(0)
