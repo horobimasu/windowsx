@@ -402,6 +402,7 @@ func DrawIconEx(
 ) error {
 	ret, _, err := syscall.SyscallN(
 		drawIconEx.Addr(),
+		handle,
 		uintptr(left),
 		uintptr(top),
 		icon,
