@@ -13,6 +13,7 @@ var (
 	selectObject       = gdi32.NewProc("SelectObject")
 	deleteObject       = gdi32.NewProc("DeleteObject")
 	deleteDC           = gdi32.NewProc("DeleteDC")
+	createSolidBrush   = gdi32.NewProc("CreateSolidBrush")
 )
 
 func CreateCompatibleDc(handle uintptr) (uintptr, error) {
@@ -74,4 +75,13 @@ func DeleteDc(handle uintptr) error {
 	}
 
 	return nil
+}
+
+func CreateSolidBrush(color uint32) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(createSolidBrush.Addr(), uintptr(color))
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
 }

@@ -9,6 +9,7 @@ var (
 	user32 = syscall.NewLazyDLL("user32.dll")
 
 	setCursorPos             = user32.NewProc("SetCursorPos")
+	getCursorPos             = user32.NewProc("GetCursorPos")
 	blockInput               = user32.NewProc("BlockInput")
 	setWinEventHook          = user32.NewProc("SetWinEventHook")
 	unhookWinEvent           = user32.NewProc("UnhookWinEvent")
@@ -36,10 +37,28 @@ var (
 	getCursorInfo            = user32.NewProc("GetCursorInfo")
 	getIconInfo              = user32.NewProc("GetIconInfo")
 	drawIconEx               = user32.NewProc("DrawIconEx")
+	getWindowDisplayAffinity = user32.NewProc("GetWindowDisplayAffinity")
+	setWindowDisplayAffinity = user32.NewProc("SetWindowDisplayAffinity")
+	sendInput                = user32.NewProc("SendInput")
+	registerClassExW         = user32.NewProc("RegisterClassExW")
+	createWindowExW          = user32.NewProc("CreateWindowExW")
+	defWindowProcW           = user32.NewProc("DefWindowProcW")
+	showWindow               = user32.NewProc("ShowWindow")
+	updateWindow             = user32.NewProc("UpdateWindow")
+	destroyWindow            = user32.NewProc("DestroyWindow")
 )
 
 func SetCursorPosition(x int, y int) error {
 	ret, _, err := syscall.SyscallN(setCursorPos.Addr(), uintptr(x), uintptr(y))
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GetCursorPos(point *Point) error {
+	ret, _, err := syscall.SyscallN(getCursorPos.Addr(), uintptr(unsafe.Pointer(point)))
 	if ret == 0 {
 		return errnoErr(err)
 	}
@@ -413,6 +432,124 @@ func DrawIconEx(
 		uintptr(flags),
 	)
 
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func GetWindowDisplayAffinity(handle uintptr) (uint32, error) {
+	var affinity uint32
+
+	ret, _, err := syscall.SyscallN(
+		getWindowDisplayAffinity.Addr(),
+		handle,
+		uintptr(unsafe.Pointer(&affinity)),
+	)
+
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return affinity, nil
+}
+
+func SetWindowDisplayAffinity(handle uintptr, affinity uint32) error {
+	ret, _, err := syscall.SyscallN(setWindowDisplayAffinity.Addr(), handle, uintptr(affinity))
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func SendInput(inputs []Input) (uint32, error) {
+	ret, _, err := syscall.SyscallN(
+		sendInput.Addr(),
+		uintptr(len(inputs)),
+		uintptr(unsafe.Pointer(&inputs[0])),
+		unsafe.Sizeof(inputs[0]),
+	)
+
+	sent := uint32(ret)
+	if sent == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return sent, nil
+}
+
+func RegisterClassEx(class *WindowClassEx) (uint16, error) {
+	class.Size = uint32(unsafe.Sizeof(*class))
+
+	ret, _, err := syscall.SyscallN(registerClassExW.Addr(), uintptr(unsafe.Pointer(class)))
+
+	atom := uint16(ret)
+	if atom == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return atom, nil
+}
+
+func CreateWindowEx(
+	exStyle uint32,
+	className *uint16,
+	windowName *uint16,
+	style uint32,
+	x int32,
+	y int32,
+	width int32,
+	height int32,
+	parent uintptr,
+	menu uintptr,
+	instance uintptr,
+	param uintptr,
+) (uintptr, error) {
+	ret, _, err := syscall.SyscallN(createWindowExW.Addr(),
+		uintptr(exStyle),
+		uintptr(unsafe.Pointer(className)),
+		uintptr(unsafe.Pointer(windowName)),
+		uintptr(style),
+		uintptr(x),
+		uintptr(y),
+		uintptr(width),
+		uintptr(height),
+		parent,
+		menu,
+		instance,
+		param,
+	)
+
+	if ret == 0 {
+		return 0, errnoErr(err)
+	}
+
+	return ret, nil
+}
+
+func DefWindowProc(handle uintptr, message uint32, wParam uintptr, lParam uintptr) uintptr {
+	ret, _, _ := syscall.SyscallN(defWindowProcW.Addr(), handle, uintptr(message), wParam, lParam)
+	return ret
+}
+
+func ShowWindow(handle uintptr, flag int) bool {
+	ret, _, _ := syscall.SyscallN(showWindow.Addr(), handle, uintptr(flag))
+	return ret != 0
+}
+
+func UpdateWindow(handle uintptr) error {
+	ret, _, err := syscall.SyscallN(updateWindow.Addr(), handle)
+	if ret == 0 {
+		return errnoErr(err)
+	}
+
+	return nil
+}
+
+func DestroyWindow(handle uintptr) error {
+	ret, _, err := syscall.SyscallN(destroyWindow.Addr(), handle)
 	if ret == 0 {
 		return errnoErr(err)
 	}

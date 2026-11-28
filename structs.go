@@ -1,5 +1,7 @@
 package windowsx
 
+import "unsafe"
+
 type Point struct {
 	X int32
 	Y int32
@@ -77,4 +79,41 @@ type BitmapInfoHeader struct { // BITMAPINFOHEADER
 	YPels        int32
 	ClrUsed      uint32
 	ClrImportant uint32
+}
+
+type MouseInput struct { // MOUSEINPUT
+	X         int32
+	Y         int32
+	MouseData uint32
+	Flags     uint32
+	Time      uint32
+	ExtraInfo uintptr
+}
+
+type KeyboardInput struct { // KEYBDINPUT
+	Code      uint16 // Vk
+	Scan      uint16
+	Flags     uint32
+	Time      uint32
+	ExtraInfo uintptr
+}
+
+type Input struct { // INPUT
+	Type  uint32
+	union [unsafe.Sizeof(MouseInput{}) / unsafe.Sizeof(uintptr(0))]uintptr
+}
+
+type WindowClassEx struct { // WNDCLASSEXA
+	Size       uint32
+	Style      uint32
+	WndProc    uintptr
+	ClsExtra   int32
+	WndExtra   int32
+	Instance   uintptr
+	Icon       uintptr
+	Cursor     uintptr
+	Background uintptr
+	MenuName   *uint16
+	ClassName  *uint16
+	IconSm     uintptr
 }

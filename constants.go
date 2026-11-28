@@ -723,3 +723,9 @@ const (
 )
 
 const ATTACH_PARENT_PROCESS = ^uint32(0)
+
+const (
+	WDA_NONE               uint32 = 0x00000000
+	WDA_MONITOR            uint32 = 0x00000001
+	WDA_EXCLUDEFROMCAPTURE uint32 = 0x00000011
+)
